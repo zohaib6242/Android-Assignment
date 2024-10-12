@@ -2,7 +2,6 @@ package com.android.goally.ui.copilot.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.goally.R
 import com.android.goally.data.model.api.response.copilot.Routine
@@ -11,14 +10,22 @@ import com.android.goally.databinding.ShimmerRowCopilotBinding
 import com.android.goally.util.setSafeOnClickListener
 import com.bumptech.glide.Glide
 
+import android.widget.Filter
+import android.widget.Filterable
+
 class CopilotAdapter(
     private var routines: List<Routine>,
     private val onCopilotClicked: (Routine) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     private val VIEW_TYPE_ITEM = 1
     private val VIEW_TYPE_SHIMMER = 2
     private var isLoading = true // Track loading state
+
+    private var originalRoutines: List<Routine> = routines.toList()
+
+    // Reference to the filter
+    private var filter: CopilotFilter? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_ITEM) {
@@ -39,8 +46,7 @@ class CopilotAdapter(
             val routine = routines[position]
             holder.bind(routine)
         } else if (holder is ShimmerViewHolder) {
-            // Shimmer view does not need to bind any data
-            holder.startShimmer() // Start shimmer effect
+            holder.startShimmer()
         }
     }
 
@@ -49,9 +55,17 @@ class CopilotAdapter(
     }
 
     fun submitList(newRoutines: List<Routine>) {
+        this.originalRoutines = newRoutines
         this.routines = newRoutines
-        this.isLoading = false // Set loading to false when data is received
+        this.isLoading = false
         notifyDataSetChanged()
+    }
+
+    override fun getFilter(): Filter {
+        if (filter == null) {
+            filter = CopilotFilter(originalRoutines, this) // Initialize the custom filter
+        }
+        return filter as CopilotFilter
     }
 
     inner class CoPilotViewHolder(private val binding: RowCopilotBinding) :
@@ -73,7 +87,6 @@ class CopilotAdapter(
                 .placeholder(R.drawable.ic_placeholder)
                 .into(binding.ivCopilotIcon)
 
-            // Setting click listener and passing the routine to the lambda
             binding.root.setSafeOnClickListener {
                 onCopilotClicked(routine)
             }
@@ -87,4 +100,5 @@ class CopilotAdapter(
             binding.shimmerViewContainer.startShimmer()
         }
     }
+
 }

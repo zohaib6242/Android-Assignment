@@ -11,7 +11,7 @@
         layout="@layout/app_bar" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewFolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -25,9 +25,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewFolder"
+        app:layout_constraintEnd_toStartOf="@+id/textViewFolder"
+        app:layout_constraintTop_toTopOf="@+id/textViewFolder"
         app:srcCompat="@drawable/ic_folder" />
 
     <ImageView
@@ -73,14 +73,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_copilots"
-        tools:listitem="@layout/row_copilot"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
+        tools:listitem="@layout/row_copilot" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

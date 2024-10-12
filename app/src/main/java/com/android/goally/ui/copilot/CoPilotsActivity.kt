@@ -13,6 +13,7 @@ import com.android.goally.data.model.api.response.copilot.Routine
 import com.android.goally.databinding.ActivityCoPilotsBinding
 import com.android.goally.ui.copilot.CoPilotDetailActivity.Companion.INTENT_DATA_KEY_COPILOT_DETAIL
 import com.android.goally.ui.copilot.adapter.CopilotAdapter
+import com.android.goally.ui.copilot.filter.FilterDialogFragment
 import com.android.goally.ui.viewmodels.CoPilotViewModel
 import com.android.goally.util.setSafeOnClickListener
 import com.android.goally.util.toast
@@ -26,7 +27,9 @@ class CoPilotsActivity : BaseActivity() {
 
     private val coPilotViewModel: CoPilotViewModel by viewModels()
 
-    private var adapter: CopilotAdapter = CopilotAdapter(listOf(), ::onCopilotClicked)
+    private var routines: MutableList<Routine> = mutableListOf()
+
+    private var adapter: CopilotAdapter = CopilotAdapter(routines, ::onCopilotClicked)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,7 @@ class CoPilotsActivity : BaseActivity() {
         }
         coPilotViewModel.coPilotApiResponseLiveData.observe(this){
             it?.let {
+                routines.addAll(it.routines)
                 adapter.submitList(it.routines)
             }
         }
@@ -63,6 +67,12 @@ class CoPilotsActivity : BaseActivity() {
     }
 
     private fun setupViews() {
+        binding.textViewFolder.setSafeOnClickListener {
+            val filterDialog = FilterDialogFragment(routines) { selectedFilter ->
+                adapter.filter.filter(selectedFilter)
+            }
+            filterDialog.show(supportFragmentManager, "FilterDialog")
+        }
         binding.appbar.ivBack.setSafeOnClickListener {
             finish()
         }
