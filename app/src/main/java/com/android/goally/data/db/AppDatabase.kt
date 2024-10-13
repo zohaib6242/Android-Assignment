@@ -3,24 +3,29 @@ package com.android.goally.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.android.goally.data.db.dao.CoPilotDao
 import com.android.goally.data.db.dao.GeneralDao
 import com.android.goally.data.db.entities.token.Authentication
+import com.android.goally.data.model.api.response.copilot.Activity
+import com.android.goally.data.model.api.response.copilot.Routine
+import com.android.goally.data.model.api.response.copilot.Schedule
 import com.android.goally.util.LogUtil
 import com.getgoally.learnerapp.data.db.DateConverter
 import com.getgoally.learnerapp.data.db.StringListConvert
 
 
 @Database(
-    entities = [Authentication::class],
+    entities = [Routine::class, Activity::class, Schedule::class, Authentication::class],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(DateConverter::class, StringListConvert::class)
+@TypeConverters(DateConverter::class, StringListConvert::class, ActivityTypeConverter::class, ScheduleTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getGeneralDao(): GeneralDao
+
+    abstract fun getCoPilotDao(): CoPilotDao
 
     companion object {
         const val DATABASE_NAME = "Goally.db"

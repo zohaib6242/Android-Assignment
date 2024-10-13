@@ -34,6 +34,8 @@ class SplashActivity : BaseActivity() {
             goToNextScreen()
         }, onError = {
             toast(it)
+            //Navigating to screen if data and token already available in database then it will show routines data
+            goToNextScreen()
         })
     }
 

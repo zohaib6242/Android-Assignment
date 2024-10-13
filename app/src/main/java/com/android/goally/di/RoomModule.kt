@@ -3,6 +3,7 @@ package com.getgoally.learnerapp.di
 import android.content.Context
 import androidx.room.Room
 import com.android.goally.data.db.AppDatabase
+import com.android.goally.data.db.dao.CoPilotDao
 import com.android.goally.data.db.dao.GeneralDao
 import dagger.Module
 import dagger.Provides
@@ -34,5 +35,11 @@ object RoomModule {
     @Provides
     fun provideGeneralDao(appDatabase: AppDatabase): GeneralDao {
         return appDatabase.getGeneralDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCoPilotDao(appDatabase: AppDatabase): CoPilotDao {
+        return appDatabase.getCoPilotDao()
     }
 }

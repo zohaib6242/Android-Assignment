@@ -1,8 +1,10 @@
 package com.getgoally.learnerapp.di
 
+import android.app.Application
 import com.android.goally.data.db.dao.*
 import com.android.goally.data.network.rest.api.GeneralApi
 import com.android.goally.data.repo.*
+import com.android.goally.util.AppUtil
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +18,8 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideGeneralRepo(
-        authenticationApi: GeneralApi, authenticationDao: GeneralDao
+        authenticationApi: GeneralApi,
+        authenticationDao: GeneralDao
     ): GeneralRepo {
         return GeneralRepo(
             authenticationApi,
@@ -27,10 +30,14 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideCoPilotRepo(
-        generalApi: GeneralApi
+        generalApi: GeneralApi,
+        coPilotDao: CoPilotDao,
+        application: Application
     ): CoPilotRepo {
         return CoPilotRepo(
-            generalApi
+            generalApi,
+            coPilotDao,
+            application
         )
     }
 

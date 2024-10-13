@@ -50,8 +50,8 @@ class CoPilotsActivity : BaseActivity() {
         }
         coPilotViewModel.coPilotApiResponseLiveData.observe(this){
             it?.let {
-                routines.addAll(it.routines)
-                adapter.submitList(it.routines)
+                routines.addAll(it)
+                adapter.submitList(it)
             }
         }
     }
